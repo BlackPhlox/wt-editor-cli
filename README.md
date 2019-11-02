@@ -13,7 +13,7 @@ A command line editor for Windows Terminal settings
   - Followed by `npm start` or `node index.js`
   
   Recommended extra step
-  - Run the following command to set an enviroment variable to call in any directory: `setx wte "node <YourPath>\wt-editor-cli\index.js"`  
+  - Run the following command to set an enviroment variable to call in any directory(replace <YourPath>): `setx wte "node <YourPath>\wt-editor-cli\index.js"`  
 
 # Contribution
 
