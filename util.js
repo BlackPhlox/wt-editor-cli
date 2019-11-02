@@ -13,7 +13,7 @@ read = function(path){
 
 write = function(data,filename){
     let sJson = JSON.stringify(data,null,4);
-    fs.writeFileSync(filename, sJson);
+    fs.writeFileSync(filename, sJson,{encoding:'utf8',flag:'w'});
 }
 
 revertToBackup = function(path){
@@ -21,9 +21,15 @@ revertToBackup = function(path){
     return read(path+".backup");
 }
 
+overwriteBackup = function(path){
+    fs.copyFile(path, path+".backup", (err) => {
+        if (err) throw err;
+    });
+}
+
 overwriteFile = function(js,path){
-    let change = path;
-    write(js,change);
+    js.profiles = getAllObjects(js.profiles);
+    write(js,path);
 }
 
 setProfileSetting = function(js,path,term,settingName,value){
@@ -39,7 +45,6 @@ setProfileSetting = function(js,path,term,settingName,value){
     } else {
         js.profiles.find(p => p.name === term.name)[settingName] = value;
     }
-    js.profiles = getAllObjects(js.profiles);
     overwriteFile(js,path);
 }
 

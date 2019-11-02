@@ -53,7 +53,7 @@ let schemes = js.schemes;
 
 try {
     if (!fs.existsSync(jsonPath+".backup")) {
-        write(js,jsonPath+".backup");
+        overwriteFile(js,jsonPath+".backup");
     } 
 } catch(err) {
     console.error(err)
@@ -305,9 +305,8 @@ function savePrompt(){
             default: false
         }
     ]).then(answers => {
-        if(answers.toSave){
-            overwriteFile(js,jsonPath); 
-            write(js,jsonPath+".backup"); 
+        if(answers.toSave){    
+            overwriteBackup(jsonPath);
             mainMenuPrompt();
         } else {
             mainMenuPrompt();
