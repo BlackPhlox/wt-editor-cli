@@ -1,5 +1,5 @@
 # wt-editor-cli
-![wt-editor-cli-showcase](https://user-images.githubusercontent.com/25123512/68074479-a74b5100-fd9b-11e9-8aad-cb85f580aad6.gif)
+![wt-editor-cli-showcase](https://user-images.githubusercontent.com/25123512/68077919-ba2a4980-fdcc-11e9-879f-6e1fecb6bb20.gif)
 A command line editor for Windows Terminal settings
 # Prerequisites
   - Running Windows 7 or later
