@@ -152,8 +152,6 @@ function updateString(then,msg,regex,regexErrorMsg,term,settingName){
     })
 }
 
-//function updateStringList(then,msg,regex,term,settingName,stringLList){
-
 function updateBoolean(then,msg,numType,term,settingName){
     inquirer
     .prompt([
@@ -331,13 +329,20 @@ function askEdit(){
         }
     ])
     .then(answers => {
-        console.log(JSON.stringify(answers, null, '  '));
         if(answers.editQuestion == 'Settings'){
-            selectSettings();
+            console.log("This is still WIP");
+            setTimeout(() => {
+                askEdit();
+            }, 1000);
+            //selectSettings();
         } else if(answers.editQuestion == 'Terminals'){
             selectTerminal();
         } else if (answers.editQuestion == 'Schemes'){
-            selectSchemes();
+            console.log("This is still WIP");
+            setTimeout(() => {
+                askEdit();
+            }, 1000);
+            //selectSchemes();
         } else if (answers.editQuestion == 'Back'){
             mainMenuPrompt();
         } else {
