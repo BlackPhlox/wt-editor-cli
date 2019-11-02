@@ -123,7 +123,7 @@ let allfonts;
 fontList.getFonts()
   .then(fonts => {
     allfonts = fonts;
-    console.log(allfonts);
+    //console.log(allfonts);
   })
   .catch(err => {
     console.log(err)
