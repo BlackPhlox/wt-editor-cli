@@ -24,27 +24,57 @@ const jsonPath = config.jsonPath;
 const hexcodeReg = /^#([0-9A-F]{3}){1,2}$/i;
 const roamingPath = "ms-appdata:///roaming/";
 const absImgDir = config.assetPath;
+
+//From https://github.com/microsoft/terminal/blob/master/doc/cascadia/SettingsSchema.md#profiles
 const terminalOptions = [
-    {name:"acrylicOpacity",type:"float",promptMsg:"Change value"},
-    {name:"closeOnExit",type:"boolean",promptMsg:"Change value"},
     {name:"colorScheme",type:"stringlist",promptMsg:"Change value"},
-    {name:"commandline",type:"string",promptMsg:"Change value"},
-    {name:"cursorColor",type:"color",promptMsg:"Change value"}, //TODO: Implement color selection support
-    {name:"cursorShape",type:"string",promptMsg:"Change value"},
-    {name:"fontFace",type:"stringlist",promptMsg:"Change value"},
-    {name:"fontSize",type:"int",promptMsg:"Change value"},
-    {name:"guid",type:"string",promptMsg:"Change value"},
-    {name:"historySize",type:"int",promptMsg:"Change value"},
-    {name:"icon",type:"path",promptMsg:"Change value"},
-    {name:"name",type:"string",promptMsg:"Change value"},
+    
     {name:"padding",type:"string",promptMsg:"Change value"},
     {name:"snapOnInput",type:"boolean",promptMsg:"Change value"},
-    {name:"startingDirectory",type:"string",promptMsg:"Change value"},
+    {name:"historySize",type:"int",promptMsg:"Change value"},
+    {name:"scrollbarState",type:"stringlist",promptMsg:"Change value"},
+    
+    {name:"cursorColor",type:"color",promptMsg:"Change value"}, //TODO: Implement color selection support
+    {name:"cursorShape",type:"stringlist",promptMsg:"Change value"},
+    
     {name:"useAcrylic",type:"boolean",promptMsg:"Change value"},
+    {name:"acrylicOpacity",type:"float",promptMsg:"Change value"},
+    
+    {name:"startingDirectory",type:"string",promptMsg:"Change value"},
+    {name:"commandline",type:"string",promptMsg:"Change value"},
+    
+    {name:"guid",type:"string",promptMsg:"Change value"},
+    {name:"tabTitle",type:"string",promptMsg:"Change value"},
+    {name:"icon",type:"path",promptMsg:"Change value"},
+    {name:"name",type:"string",promptMsg:"Change value"},
+    
+    {name:"fontSize",type:"int",promptMsg:"Change value"},
+    {name:"fontFace",type:"stringlist",promptMsg:"Change value"},
+    
+    {name:"background",type:"color",promptMsg:"Change value"},
     {name:"backgroundImage",type:"path",promptMsg:"Change value"},
-    {name:"backgroundImageStrechMode",type:"string",promptMsg:"Change value"},
-    {name:"backgroundImageOpacity",type:"float",promptMsg:"Change value"}   
+    {name:"backgroundImageStrechMode",type:"stringlist",promptMsg:"Change value"},
+    {name:"backgroundImageAlignment",type:"stringlist",promptMsg:"Change value"},
+    {name:"backgroundImageOpacity",type:"float",promptMsg:"Change value"},   
+    
+    {name:"closeOnExit",type:"boolean",promptMsg:"Change value"}
 ];
+
+const imageAlignmentValues = [
+    "center","left","top", "right", "bottom", "topLeft", "topRight", "bottomLeft", "bottomRight"
+]
+
+const imageStretchValues = [
+    "none", "fill", "uniform", "uniformToFill"
+]
+
+const cursorShapes = [
+    "vintage", "bar", "underscore", "filledBox", "emptyBox"
+]
+
+const scrollbarStates = [
+    "visible", "hidden"
+]
 
 let js = read(jsonPath);
 
@@ -107,13 +137,40 @@ function changeJSValue(settingName,profileName,then){
             updateString(then,msg,hexcodeReg,'Please enter a valid color between #000000 & #FFFFFF',term,settingName);
             break;
         case 'stringlist':
-            if(settingName === "fontFace"){
-                updateStringList(then,msg,
-                    listToFuncList(allfonts,(o)=>o.replace(/\"/g, ''))
-                    ,term,settingName);
-            } else if (settingName === "colorScheme"){                
-                updateStringList(then,msg,listToFuncList(
-                    schemes.map(s => s.name),(cs)=>cs),term,settingName);
+            switch (settingName) {
+                case 'fontFace':
+                    updateStringList(then,msg,
+                    listToFuncList(allfonts,(o)=>o.replace(/\"/g, '')),
+                    term,settingName);
+                    break;
+                case 'colorScheme':
+                    updateStringList(then,msg,
+                    listToFuncList(schemes.map(s => s.name),(cs)=>cs),
+                    term,settingName);
+                    break;
+                case 'backgroundImageAlignment':
+                    updateStringList(then,msg,
+                    listToFuncList(imageAlignmentValues,(cs)=>cs),
+                    term,settingName);
+                    break;
+                case 'backgroundImageStrechMode':
+                    updateStringList(then,msg,
+                    listToFuncList(imageStretchValues,(cs)=>cs),
+                    term,settingName);
+                    break;
+                case 'cursorShape':
+                    updateStringList(then,msg,
+                    listToFuncList(cursorShapes,(cs)=>cs),
+                    term,settingName);
+                    break;
+                case 'scrollbarState':
+                    updateStringList(then,msg,
+                    listToFuncList(scrollbarStates,(cs)=>cs),
+                    term,settingName);
+                    break;
+                default:
+                    console.log("Invalid stringlist setting");
+                    break;
             }
             break;
         default:
