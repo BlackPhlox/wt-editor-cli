@@ -6,4 +6,6 @@ set assets=%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\R
 set js=%js:\=!word!%
 set assets=%assets:\=!word!%
 echo.{"jsonPath":"%js%","assetPath":"%assets%"} >"%cd%\config.json"
+REM Sets wte as an enviroment variable
+setx wte "node "%cd%\index.js""
 
