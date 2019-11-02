@@ -8,8 +8,8 @@ A command line editor for Windows Terminal settings
   - Have npm (Comes with Node.js)
 # Setup
   - Clone this repo ```git clone https://github.com/BlackPhlox/wt-editor-cli.git```
+  - (Important) If you already have configured your `profiles.json`, I highly recommend you backup your file, just in case. The file can be found here: `%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\`
   - Go into the folder `cd wt-editor-cli`
-  - (Important) If you already have configured your `profiles.json`, I highly recommend you backup your file, just in case.
   - Run `setup.bat`
   - Run `wte`
   
