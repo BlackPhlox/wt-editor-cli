@@ -15,7 +15,8 @@ A command line editor for Windows Terminal settings
   - Followed by `npm start` or `node index.js`
   
   Recommended extra step
-  - Run the following command to set an enviroment variable to call `wte` in any directory: `setx wte "node "%cd%/index.js""`  
+  - Run the following command to set an enviroment variable to call `wte` in any directory: `setx wte "node "%cd%/index.js""`
+  - If you are running using the Linux-Subsystem you can add `alias runbat='cmd.exe /c wte'` in your `~/.bashrc` file.
 
 # Contribution
 
