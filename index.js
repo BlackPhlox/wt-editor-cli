@@ -27,7 +27,7 @@ const absImgDir = config.assetPath;
 const terminalOptions = [
     {name:"acrylicOpacity",type:"float",promptMsg:"Change value"},
     {name:"closeOnExit",type:"boolean",promptMsg:"Change value"},
-    {name:"colorScheme",type:"string",promptMsg:"Change value"},
+    {name:"colorScheme",type:"stringlist",promptMsg:"Change value"},
     {name:"commandline",type:"string",promptMsg:"Change value"},
     {name:"cursorColor",type:"color",promptMsg:"Change value"}, //TODO: Implement color selection support
     {name:"cursorShape",type:"string",promptMsg:"Change value"},
@@ -108,7 +108,12 @@ function changeJSValue(settingName,profileName,then){
             break;
         case 'stringlist':
             if(settingName === "fontFace"){
-                updateStringList(then,msg,searchFonts,term,settingName);
+                updateStringList(then,msg,
+                    listToFuncList(allfonts,(o)=>o.replace(/\"/g, ''))
+                    ,term,settingName);
+            } else if (settingName === "colorScheme"){                
+                updateStringList(then,msg,listToFuncList(
+                    schemes.map(s => s.name),(cs)=>cs),term,settingName);
             }
             break;
         default:
@@ -117,6 +122,7 @@ function changeJSValue(settingName,profileName,then){
     }
     return;
 }
+
 
 let allfonts;
 
@@ -129,19 +135,20 @@ fontList.getFonts()
     console.log(err)
   })
 
-function searchFonts(answers, input) {
-    input = input || '';
-    return new Promise(function(resolve) {
-        setTimeout(function() {
-        let fuzzyResult = fuzzy.filter(input, allfonts);
-        resolve(
-            fuzzyResult.map(function(el) {
-                let o = el.original;
-                return o.substring(1, o.length).substring(0, o.length - 2);
-            })
-        );
+function listToFuncList(list,f){
+    return searchList = (answers, input) => {
+        input = input || '';
+        return new Promise((resolve) => {
+            setTimeout(() => {
+            let fuzzyResult = fuzzy.filter(input, list);
+            resolve(
+                fuzzyResult.map((el) => {
+                    return f(el.original);
+                })
+            );
+            });
         });
-    });
+    }
 }
 
 function truncateString(str){
