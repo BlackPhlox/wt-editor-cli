@@ -14,7 +14,7 @@ A command line editor for Windows Terminal settings
   - Run `wte`
   
   Additionally step
-  - If you are running using the Linux-Subsystem you can add `alias runbat='cmd.exe /c wte'` in your `~/.bashrc` file.
+  - If you are running using the Linux-Subsystem you can add `alias wte='cmd.exe /c wte'` in your `~/.bashrc` file.
 
 # Contribution
 
