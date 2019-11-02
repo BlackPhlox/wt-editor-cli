@@ -16,10 +16,12 @@ inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
 const inquirerFileTreeSelection = require('./inquirer-file-tree-selection-prompt-custom');
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
+require('./util.js');
+
 /* SETTINGS */
 const jsonPath = config.jsonPath;
 const hexcodeReg = /^#([0-9A-F]{3}){1,2}$/i;
-const imgPath = "ms-appdata:///roaming/";
+const roamingPath = "ms-appdata:///roaming/";
 const absImgDir = config.assetPath;
 const terminalOptions = [
     {name:"acrylicOpacity",type:"float",promptMsg:"Change value"},
@@ -48,7 +50,14 @@ let js = read(jsonPath);
 let schemes = js.schemes;
 
 /* Create backup file */
-write(js,jsonPath+".backup");
+
+try {
+    if (!fs.existsSync(jsonPath+".backup")) {
+        write(js,jsonPath+".backup");
+    } 
+} catch(err) {
+    console.error(err)
+}
 
 /* Main menu */
 const commands = [
@@ -89,7 +98,7 @@ function changeJSValue(settingName,profileName,then){
             updateBoolean(then,msg,undefined,term,settingName);
             break;  
         case 'path':
-            updatePath(then,msg,term,settingName,imgPath);
+            updatePath(then,msg,term,settingName,roamingPath);
             break;
         case 'string':
             updateString(then,msg,/ */i,"Please enter a valid string",term,settingName);
@@ -136,7 +145,7 @@ function updateString(then,msg,regex,regexErrorMsg,term,settingName){
             }
         ]).then(answers => {
         console.log(answers);
-        setProfileSetting(term,settingName,answers.stringChange);  
+        setProfileSetting(js,term,settingName,answers.stringChange);  
         setTimeout(() => {
             then();
         }, 1000);
@@ -155,7 +164,7 @@ function updateBoolean(then,msg,numType,term,settingName){
         }
     ])
     .then(answers => {
-        setProfileSetting(term,settingName,answers.changeBoolean);  
+        setProfileSetting(js,term,settingName,answers.changeBoolean);  
         setTimeout(() => {
             then();
         }, 1000);
@@ -187,13 +196,13 @@ function updateNumber(then,msg,numType,term,settingName){
     p.then(answers => {
         if(isInt(answers.numberChange) && numType === 'int'){
             console.log("is Int");
-            setProfileSetting(term,settingName,answers.numberChange);  
+            setProfileSetting(js,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
             }, 1000);
         } else if(isFloat(answers.numberChange) && numType === 'float'){ 
             console.log("is Float");
-            setProfileSetting(term,settingName,answers.numberChange);  
+            setProfileSetting(js,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
             }, 1000);
@@ -213,19 +222,19 @@ function isFloat(n){
 }
 
 //profileName can be undefined, which would result in every background image being changed
-function updatePath(then,msg,term,settingName,path){
+function updatePath(then,msg,term,settingName){
     inquirer
     .prompt([
         {
         type: 'file-tree-selection',
         name: 'file',
         root: absImgDir,
-        message: msg
+        message: msg,
+        profile: term,
+        settingName: settingName
         }
     ])
-    .then(answers => {
-        const relativeImagePath = answers.file.replace(absImgDir+"\\","");
-        setProfileSetting(term,settingName,path+relativeImagePath);  
+    .then(() => { 
         setTimeout(() => {
             then();
         }, 1000);
@@ -254,8 +263,8 @@ function mainMenuPrompt(){
         switch(answers.terminal){
             case 'Edit'  : askEdit()      ; break;
             case 'Revert': revertPrompt() ; break;
-            case 'Save'  : overwriteFile(); mainMenuPrompt(); break;
-            case 'Exit'  : exitPrompt()   ; break;
+            case 'Save'  : savePrompt()   ; break;
+            case 'Exit'  : break;
             default :
                 console.log("Invalid input, try again");
                 mainMenuPrompt();
@@ -273,12 +282,13 @@ function revertPrompt(){
         {
             type: 'confirm',
             name: 'toExit',
-            message: 'Are you sure you want to load backup? Any changes will be deleted',
+            message: 'Are you sure you want to load backup? Any current changes will be deleted',
             default: false
         }
     ]).then(answers => {
         if(answers.toExit){
-            revertToBackup();
+            js = revertToBackup(jsonPath);
+            overwriteFile(js,jsonPath);
             mainMenuPrompt();
         } else {
             mainMenuPrompt();
@@ -286,19 +296,21 @@ function revertPrompt(){
     })
 }
 
-function exitPrompt(){
+function savePrompt(){
     newMenu("Exiting");
     inquirer
     .prompt([
         {
             type: 'confirm',
-            name: 'toExit',
-            message: 'Are you sure you want to exit? Any unsaved changes will be deleted',
+            name: 'toSave',
+            message: 'Are you sure you want save to backup? Previous backup will be overwritten',
             default: false
         }
     ]).then(answers => {
-        if(answers.toExit){
-
+        if(answers.toSave){
+            overwriteFile(js,jsonPath); 
+            write(js,jsonPath+".backup"); 
+            mainMenuPrompt();
         } else {
             mainMenuPrompt();
         }
@@ -415,7 +427,7 @@ function editAllTerm(){
         if (answers.editAllTerminal == 'Back'){
             selectTerminal();
         } else {
-            changeJSValue(answers.editAllTerminal, undefined, () => selectTerminal(), imgPath);       
+            changeJSValue(answers.editAllTerminal, undefined, () => selectTerminal(), roamingPath);       
         }
     })
 }
@@ -441,7 +453,7 @@ function editTerminal(terminal){
         if (answers.editTerminal == 'Back'){
             selectTerminal();
         } else if (terminalOptionList.some(e => e === answers.editTerminal)){
-            changeJSValue(answers.editTerminal,terminal.name,()=>editTerminal(terminal),imgPath);
+            changeJSValue(answers.editTerminal,terminal.name,()=>editTerminal(terminal),roamingPath);
         } else {
             console.log("Invalid input, try again");
             editTerminal(terminal);          
@@ -558,54 +570,3 @@ function getHours(s){
 }
 */
 
-/* UTIL FUCTIONS */
-
-function clear(){
-    process.stdout.write('\u001b[2J\u001b[0;0H');
-}
-
-function read(path){
-    let rawdata = fs.readFileSync(path);
-    return JSON.parse(rawdata);
-}
-
-function write(data,filename){
-    let sJson = JSON.stringify(data,null,4);
-    fs.writeFileSync(filename, sJson);
-}
-
-function revertToBackup(){
-    console.log("Reading backup into memory");
-    js = read(jsonPath+".backup");
-}
-
-//Do this as a prompt
-function overwriteFile(){
-    /*let strArr = jsonPath.substr(0,jsonPath.length-5);
-    let strArr2 = jsonPath.substr(jsonPath.length-5,jsonPath.length-1);
-    let change = strArr + "New" + strArr2; */
-    let change = jsonPath;
-    console.log("Saved files as: " + change);
-    write(js,change);
-}
-
-function setProfileSetting(term,settingName,value){
-    if(settingName === undefined || value === undefined) {
-        console.error("No setting or value specified");
-        return;
-    }
-    
-    if(term === undefined){
-        js.profiles.forEach(p => {
-            p[settingName] = value;
-        })
-    } else {
-        js.profiles.find(p => p.name === term.name)[settingName] = value;
-    }
-    js.profiles = getAllObjects(js.profiles);
-    overwriteFile();
-}
-
-function getAllObjects(list){
-    return list.filter(p => typeof p === 'object')
-}

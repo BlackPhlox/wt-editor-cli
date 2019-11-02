@@ -188,10 +188,7 @@ class FileTreeSelectionPrompt extends Base {
 
     this.render()
 
-    this.js.profiles.forEach(p => {
-      p.backgroundImage = "ms-appdata:///roaming/"+this.selected.path;
-    })
-    this.write(this.js,this.jsonPath);
+    setProfileSetting(this.js,this.jsonPath,this.opt.profile,this.opt.settingName,this.selected.path); 
   }
 
   /**
