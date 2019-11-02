@@ -8,4 +8,6 @@ set assets=%assets:\=!word!%
 echo.{"jsonPath":"%js%","assetPath":"%assets%"} >"%cd%\config.json"
 REM Sets wte as an enviroment variable
 setx wte "node "%cd%\index.js""
+REM install libraries 
+npm install
 
