@@ -8,6 +8,7 @@ const convertCssColorNameToHex = require('convert-css-color-name-to-hex');
 const { from } = require('rxjs');
 const fontList = require('font-list');
 const config = require("app-settings")("config.json");
+const fuzzy = require('fuzzy');
 
 inquirer.registerPrompt('chalk-pipe', require('inquirer-chalk-pipe'));
 inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'));
@@ -30,7 +31,7 @@ const terminalOptions = [
     {name:"commandline",type:"string",promptMsg:"Change value"},
     {name:"cursorColor",type:"color",promptMsg:"Change value"}, //TODO: Implement color selection support
     {name:"cursorShape",type:"string",promptMsg:"Change value"},
-    {name:"fontFace",type:"string",promptMsg:"Change value"},
+    {name:"fontFace",type:"stringlist",promptMsg:"Change value"},
     {name:"fontSize",type:"int",promptMsg:"Change value"},
     {name:"guid",type:"string",promptMsg:"Change value"},
     {name:"historySize",type:"int",promptMsg:"Change value"},
@@ -82,7 +83,6 @@ function changeJSValue(settingName,profileName,then){
     if(profileName !== undefined){
         term = js.profiles.find(t => t.name === profileName);
     }
-    //console.log(settingName,profileName,then);
     let opt = terminalOptions.find(e => e.name === settingName)    
     let msg = opt.promptMsg;
     let type = opt.type;
@@ -106,6 +106,11 @@ function changeJSValue(settingName,profileName,then){
         case 'color':
             updateString(then,msg,hexcodeReg,'Please enter a valid color between #000000 & #FFFFFF',term,settingName);
             break;
+        case 'stringlist':
+            if(settingName === "fontFace"){
+                updateStringList(then,msg,searchFonts,term,settingName);
+            }
+            break;
         default:
             console.log("Invalid type");
             break;
@@ -113,19 +118,64 @@ function changeJSValue(settingName,profileName,then){
     return;
 }
 
-/*
+let allfonts;
+
 fontList.getFonts()
   .then(fonts => {
-    console.log(fonts)
+    allfonts = fonts;
+    console.log(allfonts);
   })
   .catch(err => {
     console.log(err)
   })
-*/
+
+function searchFonts(answers, input) {
+    input = input || '';
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+        let fuzzyResult = fuzzy.filter(input, allfonts);
+        resolve(
+            fuzzyResult.map(function(el) {
+                let o = el.original;
+                return o.substring(1, o.length).substring(0, o.length - 2);
+            })
+        );
+        });
+    });
+}
+
+function truncateString(str){
+    if(str.length > 30){
+        let first = str.substring(0, 5);
+        let mid = "[...]"
+        let end = str.substring(str.length - 20, str.length);
+        return first + mid + end;
+    } else {
+        return str;
+    }
+}
 
 mainMenuPrompt();
 
 // UPDATE FUNCTIONS //
+
+function updateStringList(then,msg,funcList,term,settingName){
+    inquirer
+        .prompt([
+            {
+                type: 'autocomplete',
+                name: 'stringListChange',
+                message: msg,
+                source: funcList
+            }
+        ]).then(answers => {
+        console.log(answers);
+        setProfileSetting(js,jsonPath,term,settingName,answers.stringListChange);  
+        setTimeout(() => {
+            then();
+        }, 1000);
+    })
+}
 
 function updateString(then,msg,regex,regexErrorMsg,term,settingName){
     inquirer
@@ -145,7 +195,7 @@ function updateString(then,msg,regex,regexErrorMsg,term,settingName){
             }
         ]).then(answers => {
         console.log(answers);
-        setProfileSetting(js,term,settingName,answers.stringChange);  
+        setProfileSetting(js,jsonPath,term,settingName,answers.stringChange);  
         setTimeout(() => {
             then();
         }, 1000);
@@ -162,7 +212,7 @@ function updateBoolean(then,msg,numType,term,settingName){
         }
     ])
     .then(answers => {
-        setProfileSetting(js,term,settingName,answers.changeBoolean);  
+        setProfileSetting(js,jsonPath,term,settingName,answers.changeBoolean);  
         setTimeout(() => {
             then();
         }, 1000);
@@ -194,13 +244,13 @@ function updateNumber(then,msg,numType,term,settingName){
     p.then(answers => {
         if(isInt(answers.numberChange) && numType === 'int'){
             console.log("is Int");
-            setProfileSetting(js,term,settingName,answers.numberChange);  
+            setProfileSetting(js,jsonPath,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
             }, 1000);
         } else if(isFloat(answers.numberChange) && numType === 'float'){ 
             console.log("is Float");
-            setProfileSetting(js,term,settingName,answers.numberChange);  
+            setProfileSetting(js,jsonPath,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
             }, 1000);
@@ -232,7 +282,8 @@ function updatePath(then,msg,term,settingName){
         settingName: settingName
         }
     ])
-    .then(() => { 
+    .then(answers => { 
+        setProfileSetting(js,jsonPath,term,settingName,answers.file);
         setTimeout(() => {
             then();
         }, 1000);
@@ -262,7 +313,7 @@ function mainMenuPrompt(){
             case 'Edit'  : askEdit()      ; break;
             case 'Revert': revertPrompt() ; break;
             case 'Save'  : savePrompt()   ; break;
-            case 'Exit'  : break;
+            case 'Exit'  : clear()        ; break;
             default :
                 console.log("Invalid input, try again");
                 mainMenuPrompt();
@@ -436,10 +487,22 @@ function editAllTerm(){
     })
 }
 
+function truncateString(str){
+    if(str.length > 30){
+        let first = str.substring(0, 5);
+        let mid = "[...]"
+        let end = str.substring(str.length - 20, str.length);
+        return first + mid + end;
+    } else {
+        return str;
+    }
+}
+
 function editTerminal(terminal){
     newMenu("Editing terminal");
-    console.log(terminal);    
-    let terminalOptionList = Object.keys(terminal);
+    //console.log(terminal);    
+    let terminalOptionList = Object.keys(terminal).map(k => k + " " + truncateString(terminal[k]));
+    
     if(!terminalOptionList.some(e => e === "Back")){
         terminalOptionList.splice(terminalOptionList.length,0,"Back");
     }
@@ -453,11 +516,12 @@ function editTerminal(terminal){
             choices: terminalOptionList
         }
     ])
-    .then(answers => {       
-        if (answers.editTerminal == 'Back'){
+    .then(answers => {
+        let processedAnswer = answers.editTerminal.split(" ")[0];       
+        if (processedAnswer == 'Back'){
             selectTerminal();
         } else if (terminalOptionList.some(e => e === answers.editTerminal)){
-            changeJSValue(answers.editTerminal,terminal.name,()=>editTerminal(terminal),roamingPath);
+            changeJSValue(processedAnswer,terminal.name,()=>editTerminal(terminal),roamingPath);
         } else {
             console.log("Invalid input, try again");
             editTerminal(terminal);          

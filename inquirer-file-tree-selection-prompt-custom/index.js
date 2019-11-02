@@ -63,11 +63,6 @@ class FileTreeSelectionPrompt extends Base {
     return JSON.parse(rawdata);
   }
 
-  write(data,filename){
-    let sJson = JSON.stringify(data,null,4);
-    fs.writeFileSync(filename, sJson);
-  }
-
   /**
    * Start the Inquiry session
    * @param  {Function} cb  Callback when prompt is done
