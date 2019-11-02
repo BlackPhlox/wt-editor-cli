@@ -7,8 +7,13 @@ clear = function(){
 }
 
 read = function(path){
-    let rawdata = fs.readFileSync(path);
-    return JSON.parse(rawdata);
+    try{
+        let rawdata = fs.readFileSync(path);
+        return JSON.parse(rawdata);
+    } catch(err){
+        console.error("No config found, remember to run generateConfig.bat");
+        throw err;
+    }
 }
 
 write = function(data,filename){
