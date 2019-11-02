@@ -4,6 +4,8 @@ A command line editor for Windows Terminal settings
 # Prerequisites
   - Running Windows 7 or later
   - Have the latest version of Windows Terminal (Preview) installed
+  - Have Node.js 12+
+  - npm (Comes with Node.js)
 # Setup
   - Clone this repo ```git clone https://github.com/BlackPhlox/wt-editor-cli.git```
   - Go into the folder `cd wt-editor-cli`
