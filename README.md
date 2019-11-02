@@ -10,7 +10,7 @@ A command line editor for Windows Terminal settings
   - Clone this repo ```git clone https://github.com/BlackPhlox/wt-editor-cli.git```
   - Go into the folder `cd wt-editor-cli`
   - (Important) If you already have configured your `profiles.json`, I highly recommend you backup your file, just in case.
-  - (Important) Open `config.json` and change the path of `jsonPath` to where your `profiles.json` is located (should only need to change `thelu` to your username) `assetPath` should also be changed to your path of choice (used for path-related settings)
+  - Run `generateConfig.bat`
   - Run `npm install`
   - Followed by `npm start` or `node index.js`
   
