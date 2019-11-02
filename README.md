@@ -10,12 +10,10 @@ A command line editor for Windows Terminal settings
   - Clone this repo ```git clone https://github.com/BlackPhlox/wt-editor-cli.git```
   - Go into the folder `cd wt-editor-cli`
   - (Important) If you already have configured your `profiles.json`, I highly recommend you backup your file, just in case.
-  - Run `generateConfig.bat`
-  - Run `npm install`
-  - Followed by `npm start` or `node index.js`
+  - Run `setup.bat`
+  - Run `wte`
   
-  Recommended extra step
-  - Run the following command to set an enviroment variable to call `wte` in any directory: `setx wte "node "%cd%/index.js""`
+  Additionally step
   - If you are running using the Linux-Subsystem you can add `alias runbat='cmd.exe /c wte'` in your `~/.bashrc` file.
 
 # Contribution
