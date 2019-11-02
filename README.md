@@ -12,4 +12,12 @@ A command line editor for Windows Terminal settings
   - Followed by `npm start` or `node index.js`
   
   Recommended extra step
-  - Run the following command to set an enviroment variable to call in any directory: `setx wte "node C:\Users\thelu\Repos\wt-editor-cli\index.js"`
+  - Run the following command to set an enviroment variable to call in any directory: `setx wte "node C:\Users\thelu\Repos\wt-editor-cli\index.js"`  
+
+# Contribution
+
+Any contribution is appreciated, their are no formalities, just create a pull request.
+
+### Creating Pull Requests
+  Push your commit to get it back up to your fork: git push origin HEAD
+  Visit Github, click handy “Pull request” button that it will make upon noticing your new branch.
