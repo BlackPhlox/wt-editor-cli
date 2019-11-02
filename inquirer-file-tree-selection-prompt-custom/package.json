@@ -1,0 +1,62 @@
+{
+  "_from": "inquirer-file-tree-selection-prompt@^1.0.2",
+  "_id": "inquirer-file-tree-selection-prompt@1.0.2",
+  "_inBundle": false,
+  "_integrity": "sha512-qgm/Tc0w1M8UGI8SstZ4yctmN005Md8c2FuvxS2aDhX6OcJIPSvPEN9yzbazqoNe95dGyCT7ZermlcWI608zoQ==",
+  "_location": "/inquirer-file-tree-selection-prompt",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "inquirer-file-tree-selection-prompt@^1.0.2",
+    "name": "inquirer-file-tree-selection-prompt",
+    "escapedName": "inquirer-file-tree-selection-prompt",
+    "rawSpec": "^1.0.2",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/inquirer-file-tree-selection-prompt/-/inquirer-file-tree-selection-prompt-1.0.2.tgz",
+  "_shasum": "f919390f3b17d8145bf595b5c9d3900e970e1f0f",
+  "_spec": "inquirer-file-tree-selection-prompt@^1.0.2",
+  "_where": "C:\\Users\\thelu\\AppData\\Local\\Packages\\Microsoft.WindowsTerminal_8wekyb3d8bbwe\\RoamingState\\dynamicGif",
+  "author": {
+    "name": "anc95"
+  },
+  "bugs": {
+    "url": "https://github.com/anc95/inquirer-file-tree-selection/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "cli-cursor": "^3.1.0",
+    "directory-tree": "^2.2.3",
+    "figures": "^3.0.0",
+    "lodash": "^4.17.11",
+    "rxjs": "^6.5.2"
+  },
+  "deprecated": false,
+  "description": "inquerer file tree selection prompt",
+  "devDependencies": {
+    "inquirer": "^6.4.0"
+  },
+  "homepage": "https://github.com/anc95/inquirer-file-tree-selection#readme",
+  "keywords": [
+    "inquerer",
+    "filetree"
+  ],
+  "license": "ISC",
+  "main": "index.js",
+  "name": "inquirer-file-tree-selection-prompt",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anc95/inquirer-file-tree-selection.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.2"
+}
