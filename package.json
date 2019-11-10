@@ -10,6 +10,7 @@
   "author": "BlackPhlox",
   "license": "MIT",
   "dependencies": {
+    "app-settings": "^1.1.0",
     "convert-css-color-name-to-hex": "^0.1.1",
     "font-list": "^1.2.1",
     "fs": "0.0.1-security",

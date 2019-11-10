@@ -7,14 +7,14 @@ set js=%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\Local
 set assets=%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState
 set js=%js:\=!word!%
 set assets=%assets:\=!word!%
-echo {"jsonPath":"%js%","assetPath":"%assets%"} > "%cd%\config.json"
+echo {"jsonPath":"%js%","assetPath":"%assets%"} > "%~dp0config.json"
 
 echo.
 echo SUCCESS: Path was configured.
 echo.
 
 echo 2. Set wte as an environment variable
-setx wte "node "%cd%\index.js""
+setx /M wte "node %~dp0index.js"
 echo.
 
 echo 3. Installing libraries 
@@ -24,5 +24,3 @@ cmd /C "npm install"
 echo SUCCESS: Libraries was installed.
 echo.
 pause
-
-
