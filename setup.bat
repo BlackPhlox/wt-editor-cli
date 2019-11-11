@@ -14,7 +14,11 @@ echo SUCCESS: Path was configured.
 echo.
 
 echo 2. Set wte as an environment variable
-setx /M wte "node %~dp0index.js"
+
+echo $desired_entry = Get-Location;$old_path = [Environment]::GetEnvironmentVariable('path', 'machine');$old_path_entry_list = ($old_path).split(";");$new_path_entry_list = new-object system.collections.arraylist;foreach($old_path_entry in $old_path_entry_list){if($old_path_entry -eq $desired_entry){}else{[void]$new_path_entry_list.Add($old_path_entry)}}[void]$new_path_entry_list.Add($desired_entry);$new_path = $new_path_entry_list -Join ";";[Environment]::SetEnvironmentVariable('path', $new_path,'Machine');> "%~dp0envSetup01.ps1"
+powershell -command "Start-Process PowerShell -Verb RunAs \""-Command `\""cd '%cd%'; & './envSetup01.ps1';`\""\"""
+timeout /t 02
+del "envSetup01.ps1"
 echo.
 
 echo 3. Installing libraries 
@@ -23,4 +27,10 @@ cmd /C "npm install"
 
 echo SUCCESS: Libraries was installed.
 echo.
+
+echo 4. Create batfile
+echo.
+echo ^@echo off ^& cmd /C "cd %cd% & node index.js" > "wte.bat"
+
+echo Complete! Type "wte" in you terminal to run the application
 pause
