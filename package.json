@@ -1,6 +1,6 @@
 {
   "name": "wte",
-  "version": "0.0.1",
+  "version": "0.1",
   "description": "Commandline application to change Windows Terminal settings in realtime",
   "main": "index.js",
   "scripts": {
