@@ -1,4 +1,4 @@
-name: wt-editor-cli
+name: publish wt-editor-cli on release
 
 on:
   release:
