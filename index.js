@@ -2,6 +2,7 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 
+const chalk = require('chalk');
 const chalkPipe = require('chalk-pipe');
 const isCSSColorName = require('is-css-color-name');
 const convertCssColorNameToHex = require('convert-css-color-name-to-hex');
@@ -18,63 +19,21 @@ const inquirerFileTreeSelection = require('./inquirer-file-tree-selection-prompt
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
 require('./util.js');
+const settingsSchema = require('./schema.js');
+const imageAlignmentValues = settingsSchema.imageAlignmentValues;
+const imageStretchValues = settingsSchema.imageStretchValues;
+const scrollbarStates = settingsSchema.scrollbarStates;
+const terminalOptions = settingsSchema.terminalOptions;
+const cursorShapes = settingsSchema.cursorShapes;
+
+const configdef = require('./configdefaults.js');
+const configDefaults = configdef.configDefaults;
 
 /* SETTINGS */
 const jsonPath = config.jsonPath;
 const hexcodeReg = /^#([0-9A-F]{3}){1,2}$/i;
 const roamingPath = "ms-appdata:///roaming/";
 const absImgDir = config.assetPath;
-
-//From https://github.com/microsoft/terminal/blob/master/doc/cascadia/SettingsSchema.md#profiles
-const terminalOptions = [
-    {name:"colorScheme",type:"stringlist",promptMsg:"Change value"},
-    
-    {name:"padding",type:"string",promptMsg:"Change value"},
-    {name:"snapOnInput",type:"boolean",promptMsg:"Change value"},
-    {name:"historySize",type:"int",promptMsg:"Change value"},
-    {name:"scrollbarState",type:"stringlist",promptMsg:"Change value"},
-    
-    {name:"cursorColor",type:"color",promptMsg:"Change value"}, //TODO: Implement color selection support
-    {name:"cursorShape",type:"stringlist",promptMsg:"Change value"},
-    
-    {name:"useAcrylic",type:"boolean",promptMsg:"Change value"},
-    {name:"acrylicOpacity",type:"float",promptMsg:"Change value"},
-    
-    {name:"startingDirectory",type:"string",promptMsg:"Change value"},
-    {name:"commandline",type:"string",promptMsg:"Change value"},
-    
-    {name:"guid",type:"string",promptMsg:"Change value"},
-    {name:"tabTitle",type:"string",promptMsg:"Change value"},
-    {name:"icon",type:"path",promptMsg:"Change value"},
-    {name:"name",type:"string",promptMsg:"Change value"},
-    
-    {name:"fontSize",type:"int",promptMsg:"Change value"},
-    {name:"fontFace",type:"stringlist",promptMsg:"Change value"},
-    
-    {name:"background",type:"color",promptMsg:"Change value"},
-    {name:"backgroundImage",type:"path",promptMsg:"Change value"},
-    {name:"backgroundImageStrechMode",type:"stringlist",promptMsg:"Change value"},
-    {name:"backgroundImageAlignment",type:"stringlist",promptMsg:"Change value"},
-    {name:"backgroundImageOpacity",type:"float",promptMsg:"Change value"},   
-    
-    {name:"closeOnExit",type:"boolean",promptMsg:"Change value"}
-];
-
-const imageAlignmentValues = [
-    "center","left","top", "right", "bottom", "topLeft", "topRight", "bottomLeft", "bottomRight"
-]
-
-const imageStretchValues = [
-    "none", "fill", "uniform", "uniformToFill"
-]
-
-const cursorShapes = [
-    "vintage", "bar", "underscore", "filledBox", "emptyBox"
-]
-
-const scrollbarStates = [
-    "visible", "hidden"
-]
 
 let js = read(jsonPath);
 
@@ -98,14 +57,43 @@ const commands = [
     {name: "Exit"}
 ];
 
+mainMenuPrompt();
+
 /* Sub-menues */
 const editItems = [
     "Back","Settings","Terminals", "Schemes", "Add"
 ]
 
+function checkConfigSetting(s){
+    let setting = config[s];
+    if(setting === undefined || setting.length <= 0){
+        let def = configDefaults.find(pd => pd[s])[s];
+        if(def === undefined){
+            console.error("Program default not defined");   
+            return;         
+        }
+        return def;
+    } else {
+        let sett = config[s];
+        if(sett === undefined){
+            console.error(s + " is not a valid setting"); 
+            return;
+        }
+        return config[s];
+    }
+}
+
 function newMenu(name){
     clear();
-    console.log(name);
+    console.log(colorConfig("questionColor").underline(name));
+}
+
+function invalidInput(){
+    console.log(colorConfig("errorColor")("Invalid input, try again"));
+}
+
+function colorConfig(key){
+    return chalk.keyword(checkConfigSetting(key));
 }
 
 function changeJSValue(settingName,profileName,then){
@@ -116,7 +104,7 @@ function changeJSValue(settingName,profileName,then){
     let opt = terminalOptions.find(e => e.name === settingName)    
     let msg = opt.promptMsg;
     let type = opt.type;
-    console.log(type);
+    //console.log(type);
     switch (type) {
         case 'int':
             updateNumber(then,msg,type,term,settingName);
@@ -174,7 +162,7 @@ function changeJSValue(settingName,profileName,then){
             }
             break;
         default:
-            console.log("Invalid type");
+            console.log("Invalid setting type");
             break;
     }
     return;
@@ -186,7 +174,6 @@ let allfonts;
 fontList.getFonts()
   .then(fonts => {
     allfonts = fonts;
-    //console.log(allfonts);
   })
   .catch(err => {
     console.log(err)
@@ -219,7 +206,6 @@ function truncateString(str){
     }
 }
 
-mainMenuPrompt();
 
 // UPDATE FUNCTIONS //
 
@@ -307,13 +293,13 @@ function updateNumber(then,msg,numType,term,settingName){
     }
     p.then(answers => {
         if(isInt(answers.numberChange) && numType === 'int'){
-            console.log("is Int");
+            //console.log("is Int");
             setProfileSetting(js,jsonPath,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
             }, 1000);
         } else if(isFloat(answers.numberChange) && numType === 'float'){ 
-            console.log("is Float");
+            //console.log("is Float");
             setProfileSetting(js,jsonPath,term,settingName,answers.numberChange);  
             setTimeout(() => {
                 then();
@@ -379,7 +365,7 @@ function mainMenuPrompt(){
             case 'Save'  : savePrompt()   ; break;
             case 'Exit'  : clear()        ; break;
             default :
-                console.log("Invalid input, try again");
+                invalidInput();
                 mainMenuPrompt();
                 break;
         }
@@ -460,7 +446,7 @@ function askEdit(){
         } else if (answers.editQuestion == 'Back'){
             mainMenuPrompt();
         } else {
-            console.log("Invalid input, try again");
+            invalidInput();
             askEdit();
         }
     })
@@ -520,7 +506,7 @@ function selectTerminal(){
             if(js.profiles.some(p => p.name == answers.editQuestion)){
                 editTerminal(js.profiles.filter(p => p.name == answers.editQuestion)[0]);//Not handling multiple with same name
             } else {
-                console.log("Invalid input, try again");
+                invalidInput();
                 selectTerminal();
             }            
         }
@@ -587,7 +573,7 @@ function editTerminal(terminal){
         } else if (terminalOptionList.some(e => e === answers.editTerminal)){
             changeJSValue(processedAnswer,terminal.name,()=>editTerminal(terminal),roamingPath);
         } else {
-            console.log("Invalid input, try again");
+            invalidInput();
             editTerminal(terminal);          
         }
     })
@@ -620,7 +606,7 @@ function selectSchemes(){
             if(js.profiles.some(p => p.name == answers.editQuestion)){
                 editSchemes(js.profiles.filter(p => p.name == answers.editQuestion));//Not handling multiple with same name
             } else {
-                console.log("Invalid input, try again");
+                invalidInput();
                 selectTerminal();
             }            
         }

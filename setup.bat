@@ -7,7 +7,10 @@ set js=%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\Local
 set assets=%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState
 set js=%js:\=!word!%
 set assets=%assets:\=!word!%
-echo {"jsonPath":"%js%","assetPath":"%assets%"} > "%~dp0config.json"
+@echo { > "%~dp0config.json"
+@echo     "jsonPath":"%js%", >> "%~dp0config.json"
+@echo     "assetPath":"%assets%" >> "%~dp0config.json"
+@echo } >> "%~dp0config.json"
 
 echo.
 echo SUCCESS: Path was configured.

@@ -1,5 +1,5 @@
 {
-  "name": "wte",
+  "name": "wt-editor-cli",
   "version": "0.1.0",
   "description": "Commandline application to change Windows Terminal settings in realtime",
   "main": "index.js",
