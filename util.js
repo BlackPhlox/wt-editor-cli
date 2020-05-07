@@ -11,7 +11,7 @@ read = function(path){
         let rawdata = fs.readFileSync(path);
         return JSON.parse(rawdata);
     } catch(err){
-        console.error("No config found, remember to run generateConfig.bat");
+        console.error("Parse error: No settings.json or config.json found, if there is a config.json file, the path to settings.json might be incorrect, else run setup.bat again");
         throw err;
     }
 }

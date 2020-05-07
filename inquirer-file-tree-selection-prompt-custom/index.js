@@ -3,6 +3,11 @@
  * `file-tree-selection` type prompt
  */
 
+/*
+  Customzied from "inquirer-file-tree-selection-prompt": "^1.0.2"
+  See package.json or npm install inquirer-file-tree-selection-prompt
+*/
+
 const fs = require('fs');
 const _ = require('lodash');
 const chalk = require('chalk');
