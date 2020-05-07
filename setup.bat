@@ -9,7 +9,9 @@ set js=%js:\=!word!%
 set assets=%assets:\=!word!%
 @echo { > "%~dp0config.json"
 @echo     "jsonPath":"%js%", >> "%~dp0config.json"
-@echo     "assetPath":"%assets%" >> "%~dp0config.json"
+@echo     "assetPath":"%assets%", >> "%~dp0config.json"
+@echo     "questionColor":"lightgray", >> "%~dp0config.json"
+@echo     "errorColor":"red" >> "%~dp0config.json"
 @echo } >> "%~dp0config.json"
 
 echo.

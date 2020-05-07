@@ -26,9 +26,6 @@ const scrollbarStates = settingsSchema.scrollbarStates;
 const terminalOptions = settingsSchema.terminalOptions;
 const cursorShapes = settingsSchema.cursorShapes;
 
-const configdef = require('./configdefaults.js');
-const configDefaults = configdef.configDefaults;
-
 /* SETTINGS */
 const jsonPath = config.jsonPath;
 const hexcodeReg = /^#([0-9A-F]{3}){1,2}$/i;
@@ -67,7 +64,7 @@ const editItems = [
 function checkConfigSetting(s){
     let setting = config[s];
     if(setting === undefined || setting.length <= 0){
-        let def = configDefaults.find(pd => pd[s])[s];
+        let def = config.find(pd => pd[s])[s];
         if(def === undefined){
             console.error("Program default not defined");   
             return;         
