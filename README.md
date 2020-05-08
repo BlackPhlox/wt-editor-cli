@@ -27,6 +27,18 @@ A command line editor for realtime updating of Windows Terminal settings
   Additionally step
   - If you are running using the [Linux-Subsystem](https://docs.microsoft.com/en-us/windows/wsl/install-win10) you can add `alias wte='cmd.exe /c wte'` in your `~/.bashrc` file.
 
+# Configuration
+When `setup.bat` has run, a _config.json_ file has been generated. There is currently only 3 properties you can change: assetPath(cli-explorer-selector's default path), questionColor and errorColor (Both is parsed using [chalk](https://www.npmjs.com/package/chalk)): 
+ ```json
+ { 
+    "jsonPath":"(Your appdata path)/../Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json", 
+    "assetPath":"(Your appdata path)/../Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/RoamingState", 
+    "questionColor":"lightgray", 
+    "errorColor":"red" 
+} 
+
+```
+
 # Contribution
 
 Any contribution is appreciated, their are no formalities, just create a pull request.
