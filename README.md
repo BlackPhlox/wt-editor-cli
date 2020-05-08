@@ -20,7 +20,7 @@ A command line editor for realtime updating of Windows Terminal settings
 # Setup
   - Clone this repo ```git clone https://github.com/BlackPhlox/wt-editor-cli.git``` or<br> using ```npm install -g wt-editor-cli ```
   - (Important) If you already have configured your `settings.json`, I highly recommend you backup your file, just in case. The file can be found here: `%appdata%\..\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\`
-  - Go into the downloaded folder `cd wt-editor-cli`
+  - Go into the downloaded folder `cd wt-editor-cli` if via git and `%appdata%\npm\node_modules\wt-editor-cli` if via npm
   - Run `setup.bat`
   - Run `wte`
   
