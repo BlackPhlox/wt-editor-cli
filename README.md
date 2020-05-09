@@ -1,5 +1,4 @@
-# wt-editor-cli
-## What is wt-editor-cli?
+# What is wt-editor-cli?
 A command line editor for realtime updating of Windows Terminal settings
 
 ![wt-editor-cli-showcase](https://user-images.githubusercontent.com/25123512/68077919-ba2a4980-fdcc-11e9-879f-6e1fecb6bb20.gif)
@@ -11,6 +10,11 @@ A command line editor for realtime updating of Windows Terminal settings
 | NPM | [![npm version](https://badge.fury.io/js/wt-editor-cli.svg)](https://badge.fury.io/js/wt-editor-cli) |
 | Downloads |![npm](https://img.shields.io/npm/dt/wt-editor-cli?label=NPM%20Download)|
 | Twitter     | [![Twitter Follow](https://img.shields.io/twitter/follow/darkphlox?style=social)](https://twitter.com/darkphlox)      |
+
+## Related repositories
+  - [wt-editor-gui](https://github.com/BlackPhlox/wt-editor-gui) - A graphical user interface version of wt-editor-cli
+  - [Windows Terminal Editor (WTE)](https://github.com/BlackPhlox/wte) - A collection of both wt-editor-cli & wt-editor-gui
+  - [nateshmbhat's windows-terminal-tweaker](https://github.com/nateshmbhat/windows-terminal-tweaker) - A electron-based windows terminal editor
 
 # Prerequisites
   - Running Windows 7 or later
