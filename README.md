@@ -13,11 +13,11 @@ A command line editor for realtime updating of Windows Terminal settings
 
 ## Related repositories
   - [wt-editor-gui](https://github.com/BlackPhlox/wt-editor-gui) - A graphical user interface version of wt-editor-cli
-  - [Windows Terminal Editor (WTE)](https://github.com/BlackPhlox/wte) - A collection of both wt-editor-cli & wt-editor-gui
+  - [Windows Terminal Editor (WTE)](https://github.com/BlackPhlox/wte) - A collection of both wt-editor-cli & wt-editor-gui written in rust
   - [nateshmbhat's windows-terminal-tweaker](https://github.com/nateshmbhat/windows-terminal-tweaker) - A electron-based windows terminal editor
 
 # Prerequisites
-  - Running Windows 7 or later
+  - Running Windows 1903 (build >= 10.0.18362.0) or later
   - Have the latest version of Windows Terminal (Preview) installed
   - Have Node.js 12 installed or later
   - Have npm (Comes with Node.js)
