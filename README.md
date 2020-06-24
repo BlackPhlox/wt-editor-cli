@@ -8,7 +8,7 @@ A command line editor for realtime updating of Windows Terminal settings
 | Build | ![release](https://github.com/BlackPhlox/wt-editor-cli/workflows/release/badge.svg) |
 | GitHub | [![GitHub version](https://badge.fury.io/gh/BlackPhlox%2Fwt-editor-cli.svg)](https://badge.fury.io/gh/BlackPhlox%2Fwt-editor-cli) |
 | NPM | [![npm version](https://badge.fury.io/js/wt-editor-cli.svg)](https://badge.fury.io/js/wt-editor-cli) |
-| Downloads |![npm](https://img.shields.io/npm/dt/wt-editor-cli?label=NPM%20Download)|
+| Downloads |[![npm](https://img.shields.io/npm/dt/wt-editor-cli?label=NPM%20Download)](https://badge.fury.io/js/wt-editor-cli)|
 | Twitter     | [![Twitter Follow](https://img.shields.io/twitter/follow/darkphlox?style=social)](https://twitter.com/darkphlox)      |
 
 ## Related repositories
