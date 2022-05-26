@@ -11,7 +11,7 @@ const terminalOptions = [
     {name:"cursorShape",type:"stringlist",promptMsg:"Change the shape of the cursor"},
     
     {name:"useAcrylic",type:"boolean",promptMsg:"Toogle if the profile(s) should use acrylic"},
-    {name:"acrylicOpacity",type:"float",promptMsg:"Change the opacity of the acrylic"},
+    {name:"opacity",type:"int",promptMsg:"Change the opacity of the acrylic"},
     
     {name:"startingDirectory",type:"string",promptMsg:"Change the path of there the profile(s) should start"},
     {name:"commandline",type:"string",promptMsg:"Change what should be called when the profile(s) is started"},
@@ -22,7 +22,7 @@ const terminalOptions = [
     {name:"name",type:"string",promptMsg:"Change the name of the profile(s)"},
     
     {name:"fontSize",type:"int",promptMsg:"Change the font-size of the profile(s)"},
-    {name:"fontFace",type:"stringlist",promptMsg:"Change the font of the profile(s)"},
+    {name:"font",type:"stringlist",promptMsg:"Change the font of the profile(s)"},
     
     {name:"background",type:"color",promptMsg:"Change the background color of the profile(s)"},
     {name:"backgroundImage",type:"path",promptMsg:"Change the background image of the profile(s)"},

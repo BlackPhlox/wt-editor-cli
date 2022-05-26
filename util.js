@@ -33,7 +33,7 @@ overwriteBackup = function(path){
 }
 
 overwriteFile = function(js,path){
-    js.profiles = getAllObjects(js.profiles);
+    js.profiles.list = getAllObjects(js.profiles.list);
     write(js,path);
 }
 
@@ -44,11 +44,11 @@ setProfileSetting = function(js,path,term,settingName,value){
     }
     
     if(term === undefined){
-        js.profiles.forEach(p => {
+        js.profiles.list.forEach(p => {
             p[settingName] = value;
         })
     } else {
-        js.profiles.find(p => p.name === term.name)[settingName] = value;
+        js.profiles.list.find(p => p.name === term.name)[settingName] = value;
     }
     overwriteFile(js,path);
 }

@@ -96,9 +96,10 @@ function colorConfig(key){
 function changeJSValue(settingName,profileName,then){
     let term;
     if(profileName !== undefined){
-        term = js.profiles.find(t => t.name === profileName);
+        term = js.profiles.list.find(t => t.name === profileName);
     }
     let opt = terminalOptions.find(e => e.name === settingName)    
+    console.log(settingName);
     let msg = opt.promptMsg;
     let type = opt.type;
     //console.log(type);
@@ -123,7 +124,7 @@ function changeJSValue(settingName,profileName,then){
             break;
         case 'stringlist':
             switch (settingName) {
-                case 'fontFace':
+                case 'font':
                     updateStringList(then,msg,
                     listToFuncList(allfonts,(o)=>o.replace(/\"/g, '')),
                     term,settingName);
@@ -477,7 +478,7 @@ function selectSettings(){
 
 function selectTerminal(){
     newMenu("Select terminal to edit");
-    let editTerminalOptionList = js.profiles;
+    let editTerminalOptionList = js.profiles.list;
     if(!editTerminalOptionList.some(e => e === "Add" || e === "Back" || e === "Edit all")){
         editTerminalOptionList.splice(0,0,"Add");
         editTerminalOptionList.splice(1,0,"Edit all");
@@ -500,8 +501,8 @@ function selectTerminal(){
         } else if(answers.editQuestion == 'Edit all'){
             editAllTerm();
         } else {
-            if(js.profiles.some(p => p.name == answers.editQuestion)){
-                editTerminal(js.profiles.filter(p => p.name == answers.editQuestion)[0]);//Not handling multiple with same name
+            if(js.profiles.list.some(p => p.name == answers.editQuestion)){
+                editTerminal(js.profiles.list.filter(p => p.name == answers.editQuestion)[0]);//Not handling multiple with same name
             } else {
                 invalidInput();
                 selectTerminal();
@@ -600,8 +601,8 @@ function selectSchemes(){
         } else if (answers.editQuestion == 'Back'){
             askEdit();
         } else {
-            if(js.profiles.some(p => p.name == answers.editQuestion)){
-                editSchemes(js.profiles.filter(p => p.name == answers.editQuestion));//Not handling multiple with same name
+            if(js.profiles.list.some(p => p.name == answers.editQuestion)){
+                editSchemes(js.profiles.list.filter(p => p.name == answers.editQuestion));//Not handling multiple with same name
             } else {
                 invalidInput();
                 selectTerminal();
